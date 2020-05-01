@@ -1,16 +1,40 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinColumn,
+  OneToOne,
+} from 'typeorm';
+
+import Category from './Category';
+
+@Entity('transactions')
 class Transaction {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
   title: string;
 
-  type: 'income' | 'outcome';
+  @Column({ type: 'enum', enum: ['income', 'outcome'] })
+  type: string;
 
+  @Column('int4')
   value: number;
 
+  @Column()
   category_id: string;
 
+  @OneToOne(() => Category)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
+
+  @CreateDateColumn()
   created_at: Date;
 
+  @UpdateDateColumn()
   updated_at: Date;
 }
 
